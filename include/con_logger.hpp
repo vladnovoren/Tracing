@@ -14,7 +14,8 @@ class ConLogger {
   static ConLogger& GetInstance();
   static size_t GetDepth();
 
-  void LogCtor(const LogInt& elem);
+  void LogDefaultCtor(const LogInt& elem);
+  void LogValueCtor(const LogInt& elem);
   void LogCopyCtor(const LogInt& dst, const LogInt& src);
   void LogElem(const LogInt& elem);
 
@@ -22,6 +23,7 @@ class ConLogger {
   ConLogger() = default;
 
   void LogShift();
+  void LogNewVar();
 
   static size_t depth_;
   bool is_for_func_ = false;

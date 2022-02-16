@@ -5,12 +5,12 @@ size_t LogInt::imp_num_ = 0;
 
 LogInt::LogInt(const char* name) {
   SetName(name);
-  ConLogger::GetInstance().LogCtor(*this);
+  ConLogger::GetInstance().LogDefaultCtor(*this);
 }
 
 LogInt::LogInt(const int value, const char* name): value_(value) {
   SetName(name);
-  ConLogger::GetInstance().LogCtor(*this);
+  ConLogger::GetInstance().LogValueCtor(*this);
 }
 
 LogInt::LogInt(const LogInt& other, const char* name): value_(other.value_) {
