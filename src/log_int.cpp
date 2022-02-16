@@ -1,24 +1,40 @@
 #include "log_int.hpp"
 
-size_t LogInt::num_ = 0;
+size_t LogInt::exp_num_ = 0;
+size_t LogInt::imp_num_ = 0;
 
 LogInt::LogInt(const char* name) {
   SetName(name);
-  FUNC_CON_LOG_NL;
+  ConLogger::GetInstance().LogCtor(*this);
 }
 
 LogInt::LogInt(const int value, const char* name): value_(value) {
   SetName(name);
-  FUNC_CON_LOG_NL;
+  ConLogger::GetInstance().LogCtor(*this);
 }
 
 LogInt::LogInt(const LogInt& other, const char* name): value_(other.value_) {
   SetName(name);
-  FUNC_CON_LOG_NL;
+  ConLogger::GetInstance().LogCopyCtor(*this, other);
 }
 
 LogInt::~LogInt() {
-  FUNC_CON_LOG_NL;
+}
+
+const char* LogInt::GetName() const {
+  return name_;
+}
+
+size_t LogInt::GetNum() const {
+  return is_imp_ ? imp_num_ : exp_num_;
+}
+
+bool LogInt::IsImp() const {
+  return is_imp_;
+}
+
+const char* LogInt::GetTypeStr() const {
+  return is_imp_ ? IMP : EXP;
 }
 
 LogInt& LogInt::operator=(const LogInt& other) {
@@ -30,8 +46,11 @@ LogInt& LogInt::operator=(const LogInt& other) {
 void LogInt::SetName(const char* name) {
   name_ = name;
   if (name != nullptr) {
-    is_tmp_var_ = true;
+    is_imp_ = false;
+    ++exp_num_;
   } else {
-    name_ = TMP_VAR;
+    is_imp_ = true;
+    name_ = IMP;
+    ++imp_num_;
   }
 }
