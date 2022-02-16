@@ -18,11 +18,15 @@ class ConLogger {
   void LogValueCtor(const LogInt& elem);
   void LogCopyCtor(const LogInt& dst, const LogInt& src);
 
+  void LogAssOp(const LogInt& dst, const LogInt& src);
+  // void LogPlusOp()
+
  private:
   ConLogger() = default;
 
   void LogShift();
   void LogElem(const LogInt& elem);
+  void LogValue(const LogInt& elem);
 
   static size_t depth_;
   bool is_for_func_ = false;
@@ -33,5 +37,10 @@ class ConLogger {
 #define FUNC_CON_LOG_NL \
   ConLogger logger(__PRETTY_FUNCTION__); \
   printf("\n");
+
+void SetDefault();
+void SetRedBlink();
+void SetGreen();
+void SetYellowBold();
 
 #endif /* con_logger.hpp */

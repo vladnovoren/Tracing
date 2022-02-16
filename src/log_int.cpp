@@ -3,17 +3,17 @@
 size_t LogInt::exp_num_ = 0;
 size_t LogInt::imp_num_ = 0;
 
-LogInt::LogInt(const char* name) {
+LogInt::LogInt(const std::string& name) {
   SetName(name);
   ConLogger::GetInstance().LogDefaultCtor(*this);
 }
 
-LogInt::LogInt(const int value, const char* name): value_(value) {
+LogInt::LogInt(const int value, const std::string& name): value_(value) {
   SetName(name);
   ConLogger::GetInstance().LogValueCtor(*this);
 }
 
-LogInt::LogInt(const LogInt& other, const char* name): value_(other.value_) {
+LogInt::LogInt(const LogInt& other, const std::string& name): value_(other.value_) {
   SetName(name);
   ConLogger::GetInstance().LogCopyCtor(*this, other);
 }
@@ -21,7 +21,7 @@ LogInt::LogInt(const LogInt& other, const char* name): value_(other.value_) {
 LogInt::~LogInt() {
 }
 
-const char* LogInt::GetName() const {
+const std::string& LogInt::GetName() const {
   return name_;
 }
 
@@ -38,19 +38,19 @@ const char* LogInt::GetTypeStr() const {
 }
 
 LogInt& LogInt::operator=(const LogInt& other) {
-  FUNC_CON_LOG_NL;
   value_ = other.value_;
+  ConLogger::GetInstance().LogAssOp(*this, other);
   return *this;
 }
 
-void LogInt::SetName(const char* name) {
-  name_ = name;
-  if (name != nullptr) {
-    is_imp_ = false;
+void LogInt::SetName(const std::string& name) {
+  if (name != "") {
     ++exp_num_;
+    is_imp_ = false;
+    name_ = "\x1b[32m" + name + "#" + std::to_string(exp_num_) + "\x1b[0m";
   } else {
-    is_imp_ = true;
-    name_ = IMP;
     ++imp_num_;
+    is_imp_ = true;
+    name_ = "\x1b[1;33mIMP#" + std::to_string(imp_num_) + "\x1b[0m";
   }
 }

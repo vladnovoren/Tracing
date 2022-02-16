@@ -2,18 +2,19 @@
 #define LOG_INT_HPP
 
 #include "con_logger.hpp"
+#include <string>
 
 static const char* const EXP = "EXP";
 static const char* const IMP = "IMP";
 
 class LogInt {
  public:
-  LogInt(const char* name = nullptr);
-  LogInt(const int value, const char* name = nullptr);
-  LogInt(const LogInt& other, const char* name = nullptr);
+  LogInt(const std::string& name = "");
+  LogInt(const int value, const std::string& name = "");
+  LogInt(const LogInt& other, const std::string& name = "");
   ~LogInt();
 
-  const char* GetName() const;
+  const std::string& GetName() const;
   size_t GetNum() const;
   bool IsImp() const;
   const char* GetTypeStr() const;
@@ -22,11 +23,20 @@ class LogInt {
 
   int value_ = 0;
 
+  #define UNARY_OPTOR(op, name, disp) \
+  LogInt operator op() const { \
+    value_ = op value_; \
+    ConLogger::GetInstance().LogUnaryOptor(#name, #disp, *this); \
+    return *this; \
+  }
+
+  
+
  private:
-  void SetName(const char* name);
+  void SetName(const std::string& name);
   void LogName();
 
-  const char* name_ = nullptr;
+  std::string name_ = "";
   static size_t exp_num_;
   static size_t imp_num_;
 

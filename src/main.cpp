@@ -7,8 +7,10 @@ void Func(const int*, size_t) {
 int main() {
   FUNC_CON_LOG_NL;
 
+  LogInt c;
   LOG_INT_INIT_BY_COPY(a, LogInt(LogInt(1)));
-  LogInt b = a;
+  LOG_INT_INIT_BY_COPY(b, a);
+  b = a;
 
   return 0;
 }
