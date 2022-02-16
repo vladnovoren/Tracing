@@ -17,13 +17,12 @@ class ConLogger {
   void LogDefaultCtor(const LogInt& elem);
   void LogValueCtor(const LogInt& elem);
   void LogCopyCtor(const LogInt& dst, const LogInt& src);
-  void LogElem(const LogInt& elem);
 
  private:
   ConLogger() = default;
 
   void LogShift();
-  void LogNewVar();
+  void LogElem(const LogInt& elem);
 
   static size_t depth_;
   bool is_for_func_ = false;

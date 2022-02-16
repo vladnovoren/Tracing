@@ -31,24 +31,26 @@ size_t ConLogger::GetDepth() {
 
 void ConLogger::LogDefaultCtor(const LogInt& elem) {
   LogShift();
-  LogNewVar();
+  printf("DefaultCtor %s ", elem.GetName());
   LogElem(elem);
   printf("\n");
 }
 
 void ConLogger::LogValueCtor(const LogInt& elem) {
   LogShift();
-  LogNewVar();
+  printf("ValueCtor %s(%d) ", elem.GetName(), elem.value_);
   LogElem(elem);
-  printf(" <---(.value_ = %d)\n", elem.value_);
+  printf("\n");
 }
 
 void ConLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
+
   LogShift();
-  LogNewVar();
-  printf("\033[5;31mCOPY \033[0m");
+  printf("\033[5;31mCopyCtor \033[0m");
+  printf("%s ", dst.GetName());
   LogElem(dst);
   printf(" <---(.value_ = %d)--- ", dst.value_);
+  printf("%s ", src.GetName());
   LogElem(src);
   printf("\n");
 }
@@ -59,14 +61,6 @@ void ConLogger::LogShift() {
   }
 }
 
-void ConLogger::LogNewVar() {
-  printf("new ");
-}
-
 void ConLogger::LogElem(const LogInt& elem) {
-  printf("%s [", elem.GetTypeStr());
-  if (!elem.IsImp()) {
-    printf("%s | ", elem.GetName());
-  }
-  printf("#%zu | %p]", elem.GetNum(), static_cast<const void*>(&elem));
+  printf("[#%zu | this = %p]", elem.GetNum(), static_cast<const void*>(&elem));
 }
