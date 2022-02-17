@@ -31,8 +31,12 @@ size_t ConLogger::GetDepth() {
 
 void ConLogger::LogDefaultCtor(const LogInt& elem) {
   LogShift();
-  printf("%-12s", "DefaultCtor");
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  printf("(New) ");
   printf("%s", elem.GetName().c_str());
+  SetDefault();
   printf(" {");
   LogValue(elem);
   printf("} ");
@@ -42,8 +46,13 @@ void ConLogger::LogDefaultCtor(const LogInt& elem) {
 
 void ConLogger::LogValueCtor(const LogInt& elem) {
   LogShift();
-  printf("%-12s", "ValueCtor");
-  printf("%-20s", (elem.GetName() + "(" + std::to_string(elem.value_) + ")").c_str());
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  printf("(New) ");
+  printf("%s", elem.GetName().c_str());
+  SetDefault();
+  printf("(%d) ", elem.value_);
   printf("{");
   LogValue(elem);
   printf("} ");
@@ -53,11 +62,13 @@ void ConLogger::LogValueCtor(const LogInt& elem) {
 
 void ConLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   LogShift();
-  SetRedBlink();
-  printf("%-12s", "CopyCtor");
+  if (dst.IsImp()) {
+    SetRedBlink();
+  }
+  printf("(New) ");
+  printf("%s", dst.GetName().c_str());
   SetDefault();
-
-  printf("%s", (dst.GetName() + "(" + src.GetName().c_str() + ") ").c_str());
+  printf("(%s) ", src.GetName().c_str());
   printf("{");
   LogValue(dst);
   printf("} ");
@@ -69,7 +80,6 @@ void ConLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
 
 void ConLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
   LogShift();
-  printf("%-12s", "AssOptor");
   printf("%s = %s ", dst.GetName().c_str(), src.GetName().c_str());
   printf("{");
   LogValue(dst);
@@ -80,10 +90,42 @@ void ConLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
   printf("\n");
 }
 
-void ConLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op, const std::string& op_name) {
+void ConLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) {
   LogShift();
-  printf("%-12s", op_name);
-  printf("%s = %s%s", elem.GetName().c_str(), parent.GetName().c_str);
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  printf("(New) ");
+  printf("%s", elem.GetName().c_str());
+  SetDefault();
+  printf(" = %s%s ", op.c_str(), parent.GetName().c_str());
+  printf("{");
+  LogValue(elem);
+  printf("} ");
+  LogElem(elem);
+  printf(" ");
+  LogElem(parent);
+  printf("\n");
+}
+
+void ConLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) {
+  LogShift();
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  printf("(New) ");
+  printf("%s", elem.GetName().c_str());
+  SetDefault();
+  printf(" = %s %s %s ", parent1.GetName().c_str(), op.c_str(), parent2.GetName().c_str());
+  printf("{");
+  LogValue(elem);
+  printf("} ");
+  LogElem(elem);
+  printf(" ");
+  LogElem(parent1);
+  printf(" ");
+  LogElem(parent2);
+  printf("\n");
 }
 
 void ConLogger::LogShift() {

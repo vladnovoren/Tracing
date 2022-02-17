@@ -43,29 +43,48 @@ LogInt& LogInt::operator=(const LogInt& other) {
   return *this;
 }
 
-#define UNARY_OPTOR(op, name) \
+#define UNARY_OPTOR(op) \
 LogInt LogInt::operator op() const { \
-  ConLogger::GetInstance().LogUnaryOptor(*this, #op, #name); \
-  return LogInt(op value_, #op, #name); \
+  return LogInt(*this, op value_, #op); \
 }
+
+#define BINARY_OPTOR(op) \
+LogInt LogInt::operator op(const LogInt& other) const { \
+  return LogInt(*this, other, this->value_ op other.value_, #op); \
+}
+
+#define BINARY_ASS_OPTOR(op) \
+LogInt LogInt::operator op(const LogInt& other) { \
+  
+}
+
+#define BINARY_COMP_OPTOR(op) \
+LogInt operator op(const LogInt& other) const;
+
 
 #include "optors.hpp"
 
+#undef BINARY_OPTOR
 #undef UNARY_OPTOR
 
-LogInt::LogInt(const LogInt& parent, const int value, const std::string& op, const std::string& op_name): value_(value) {
+LogInt::LogInt(const LogInt& parent, const int value, const std::string& op): value_(value) {
   SetName();
-  ConLogger::GetInstance().LogUnaryOptor(*this, op, op_name);
+  ConLogger::GetInstance().LogUnaryOptor(*this, parent, op);
+}
+
+LogInt::LogInt(const LogInt& parent1, const LogInt& parent2, const int value, const std::string& op): value_(value) {
+  SetName();
+  ConLogger::GetInstance().LogBinaryOptor(*this, parent1, parent2, op);
 }
 
 void LogInt::SetName(const std::string& name) {
   if (name != "") {
     ++exp_num_;
     is_imp_ = false;
-    name_ = "\x1b[32m" + name + "#" + std::to_string(exp_num_) + "\x1b[0m";
+    name_ = name + "#" + std::to_string(exp_num_);
   } else {
     ++imp_num_;
     is_imp_ = true;
-    name_ = "\x1b[1;33mIMP#" + std::to_string(imp_num_) + "\x1b[0m";
+    name_ = "IMP#" + std::to_string(imp_num_);
   }
 }

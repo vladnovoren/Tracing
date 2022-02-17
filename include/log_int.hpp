@@ -23,18 +23,30 @@ class LogInt {
 
   int value_ = 0;
 
-  #define UNARY_OPTOR(op, name) \
+  #define UNARY_OPTOR(op) \
   LogInt operator op() const;
+
+  #define BINARY_OPTOR(op) \
+  LogInt operator op(const LogInt& other) const;
+
+  #define BINARY_ASS_OPTOR(op) \
+  LogInt& operator op(const LogInt& other);
+
+  #define BINARY_COMP_OPTOR(op) \
+  bool operator op(const LogInt& other) const;
 
   #include "optors.hpp"
 
   #undef UNARY_OPTOR
+  #undef BINARY_OPTOR
+  #undef BINARY_ASS_OPTOR
+  #undef BINARY_COMP_OPTOR
 
  private:
   // for unary operators
-  LogInt(const LogInt& parent, const int value, const std::string& op, const std::string& op_name);
+  LogInt(const LogInt& parent, const int value, const std::string& op);
   // for binary operators
-  LogInt(const LogInt& parent1, const LogInt& parent2, const std::string& op, const std::string& op_name);
+  LogInt(const LogInt& parent1, const LogInt& parent2, const int value, const std::string& op);
 
   void SetName(const std::string& name = "");
   void LogName();
@@ -48,7 +60,7 @@ class LogInt {
 
 #define LOG_INT_DECL(var) LogInt var(#var)
 
-#define LOG_INT_INIT_BY_INT(var, value) var()
+#define LOG_INT_INIT_BY_VALUE(var, value) LogInt var(value, #var)
 
 #define LOG_INT_INIT_BY_COPY(var, other) LogInt var(other, #var)
 
