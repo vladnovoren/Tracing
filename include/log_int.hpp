@@ -23,17 +23,20 @@ class LogInt {
 
   int value_ = 0;
 
-  #define UNARY_OPTOR(op, name, disp) \
-  LogInt operator op() const { \
-    value_ = op value_; \
-    ConLogger::GetInstance().LogUnaryOptor(#name, #disp, *this); \
-    return *this; \
-  }
+  #define UNARY_OPTOR(op, name) \
+  LogInt operator op() const;
 
-  
+  #include "optors.hpp"
+
+  #undef UNARY_OPTOR
 
  private:
-  void SetName(const std::string& name);
+  // for unary operators
+  LogInt(const LogInt& parent, const int value, const std::string& op, const std::string& op_name);
+  // for binary operators
+  LogInt(const LogInt& parent1, const LogInt& parent2, const std::string& op, const std::string& op_name);
+
+  void SetName(const std::string& name = "");
   void LogName();
 
   std::string name_ = "";

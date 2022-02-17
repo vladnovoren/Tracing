@@ -43,6 +43,21 @@ LogInt& LogInt::operator=(const LogInt& other) {
   return *this;
 }
 
+#define UNARY_OPTOR(op, name) \
+LogInt LogInt::operator op() const { \
+  ConLogger::GetInstance().LogUnaryOptor(*this, #op, #name); \
+  return LogInt(op value_, #op, #name); \
+}
+
+#include "optors.hpp"
+
+#undef UNARY_OPTOR
+
+LogInt::LogInt(const LogInt& parent, const int value, const std::string& op, const std::string& op_name): value_(value) {
+  SetName();
+  ConLogger::GetInstance().LogUnaryOptor(*this, op, op_name);
+}
+
 void LogInt::SetName(const std::string& name) {
   if (name != "") {
     ++exp_num_;

@@ -80,6 +80,12 @@ void ConLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
   printf("\n");
 }
 
+void ConLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op, const std::string& op_name) {
+  LogShift();
+  printf("%-12s", op_name);
+  printf("%s = %s%s", elem.GetName().c_str(), parent.GetName().c_str);
+}
+
 void ConLogger::LogShift() {
   for (size_t i = 0; i < depth_; ++i) {
     printf("  ");

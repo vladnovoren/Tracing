@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <cassert>
+#include <string>
 
 class LogInt;
 
@@ -19,7 +20,8 @@ class ConLogger {
   void LogCopyCtor(const LogInt& dst, const LogInt& src);
 
   void LogAssOp(const LogInt& dst, const LogInt& src);
-  // void LogPlusOp()
+
+  void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op, const std::string& name);
 
  private:
   ConLogger() = default;
