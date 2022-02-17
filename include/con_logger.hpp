@@ -24,7 +24,7 @@ class ConLogger {
   void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op);
   void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op);
   void LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op);
-  void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op);
+  void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res);
 
  private:
   ConLogger() = default;

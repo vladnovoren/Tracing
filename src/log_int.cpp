@@ -54,18 +54,24 @@ LogInt LogInt::operator op(const LogInt& other) const { \
 }
 
 #define BINARY_ASS_OPTOR(op) \
-LogInt LogInt::operator op(const LogInt& other) { \
-  
+LogInt& LogInt::operator op(const LogInt& other) { \
+  value_ op other.value_; \
+  ConLogger::GetInstance().LogBinaryAssOptor(*this, other, #op); \
+  return *this; \
 }
 
 #define BINARY_COMP_OPTOR(op) \
-LogInt operator op(const LogInt& other) const;
-
+bool LogInt::operator op(const LogInt& other) const { \
+  ConLogger::GetInstance().LogCompOptor(*this, other, #op, value_ op other.value_); \
+  return value_ op other.value_; \
+}
 
 #include "optors.hpp"
 
 #undef BINARY_OPTOR
 #undef UNARY_OPTOR
+#undef BINARY_ASS_OPTOR
+#undef BINARY_COMP_OPTOR
 
 LogInt::LogInt(const LogInt& parent, const int value, const std::string& op): value_(value) {
   SetName();

@@ -128,6 +128,25 @@ void ConLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const 
   printf("\n");
 }
 
+void ConLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) {
+  LogShift();
+  printf("%s %s %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str());
+  printf("{");
+  LogValue(elem);
+  printf("} ");
+  LogElem(other);
+  printf("\n");
+}
+
+void ConLogger::LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) {
+  LogShift();
+  printf("%s %s %s - %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str(), res ? "true" : "false");
+  LogElem(elem);
+  printf(" ");
+  LogElem(other);
+  printf("\n");
+}
+
 void ConLogger::LogShift() {
   for (size_t i = 0; i < depth_; ++i) {
     printf("  ");
