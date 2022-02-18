@@ -10,7 +10,8 @@ class LogInt;
 
 class ConLogger: public ILogger {
  public:
-  ~ConLogger();
+  ConLogger() = default;
+  ~ConLogger() override = default;
 
   void LogDefaultCtor(const LogInt& elem) override;
   void LogValueCtor(const LogInt& elem) override;
@@ -35,9 +36,6 @@ class ConLogger: public ILogger {
   void SetRedBlink() override;
   void SetGreen() override;
   void SetYellowBold() override;
-
-  static size_t depth_;
-  bool is_for_func_ = false;
 };
 
 #endif /* con_logger.hpp */

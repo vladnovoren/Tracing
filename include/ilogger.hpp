@@ -9,10 +9,10 @@ class LogInt;
 
 class ILogger {
  public:
-  ILogger(const char* func);
-  ~ILogger();
+  ILogger() = default;
+  virtual ~ILogger() = 0;
 
-  static ILogger* curr_logger;
+  static ILogger* curr_logger_;
 
   static size_t GetDepth();
 
@@ -27,12 +27,10 @@ class ILogger {
   virtual void LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) = 0;
   virtual void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) = 0;
 
-  virtual void LogFuncEntry(const std::string& func);
-  virtual void LogFuncEnd();
+  virtual void LogFuncEntry(const std::string& func) = 0;
+  virtual void LogFuncEnd() = 0;
 
- private:
-  ILogger() = default;
-
+ protected:
   virtual void LogShift() = 0;
   virtual void LogElem(const LogInt& elem) = 0;
   virtual void LogValue(const LogInt& elem) = 0;
@@ -43,7 +41,6 @@ class ILogger {
   virtual void SetYellowBold() = 0;
 
   static size_t depth_;
-  bool is_for_func_ = false;
 };
 
 void SetDefault();

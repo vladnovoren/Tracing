@@ -1,8 +1,6 @@
 #include "con_logger.hpp"
 #include "log_int.hpp"
 
-size_t ConLogger::depth_ = 0;
-
 void ConLogger::LogDefaultCtor(const LogInt& elem) {
   LogShift();
   if (elem.IsImp()) {

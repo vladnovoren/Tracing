@@ -1,5 +1,7 @@
 #include "func_logger.hpp"
+#include "con_logger.hpp"
 #include "log_int.hpp"
+#include "log_initer.hpp"
 
 void Func(const int*, size_t) {
   FUNC_CON_LOG;
@@ -15,16 +17,11 @@ LogInt Rec(const size_t n) {
 }
 
 int main() {
+  LogIniter::GetInstance();
+
   FUNC_CON_LOG;
 
   LOG_INT_INIT_BY_COPY(res, Rec(5));
-
-  // LOG_INT_DECL(c);
-  // LOG_INT_INIT_BY_COPY(a, LogInt(LogInt(1)));
-  // LOG_INT_INIT_BY_COPY(b, a);
-  // LOG_INT_INIT_BY_COPY(d, a * b + b * c);
-
-
 
   return 0;
 }
