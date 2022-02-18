@@ -3,31 +3,6 @@
 
 size_t ConLogger::depth_ = 0;
 
-ConLogger::ConLogger(const char* func) {
-  assert(func != nullptr);
-
-  is_for_func_ = true;
-  LogShift();
-  printf("%s {", func);
-  ++depth_;
-}
-
-ConLogger::~ConLogger() {
-  if (is_for_func_) {
-    --depth_;
-    LogShift();
-    printf("}\n");
-  }
-}
-
-ConLogger& ConLogger::GetInstance() {
-  static ConLogger instance;
-  return instance;
-}
-
-size_t ConLogger::GetDepth() {
-  return depth_;
-}
 
 void ConLogger::LogDefaultCtor(const LogInt& elem) {
   LogShift();
@@ -161,18 +136,18 @@ void ConLogger::LogValue(const LogInt& elem) {
   printf("%s.value_ = %d", elem.GetName().c_str(), elem.value_);
 }
 
-void SetDefault() {
+void ConLogger::SetDefault() {
   printf("\x1b[0m");
 }
 
-void SetRedBlink() {
+void ConLogger::SetRedBlink() {
   printf("\x1b[5;33m");
 }
 
-void SetGreen() {
+void ConLogger::SetGreen() {
   printf("\x1b[32m");
 }
 
-void SetYellowBold() {
+void ConLogger::SetYellowBold() {
   printf("\x1b[1;33m");
 }

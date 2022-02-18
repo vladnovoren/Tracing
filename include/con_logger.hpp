@@ -4,48 +4,40 @@
 #include <cstdio>
 #include <cassert>
 #include <string>
+#include "ilogger.hpp"
 
 class LogInt;
 
-class ConLogger {
+class ConLogger: public ILogger {
  public:
-  ConLogger(const char* func);
+  ConLogger() = default;
   ~ConLogger();
 
-  static ConLogger& GetInstance();
-  static size_t GetDepth();
+  void LogDefaultCtor(const LogInt& elem) override;
+  void LogValueCtor(const LogInt& elem) override;
+  void LogCopyCtor(const LogInt& dst, const LogInt& src) override;
 
-  void LogDefaultCtor(const LogInt& elem);
-  void LogValueCtor(const LogInt& elem);
-  void LogCopyCtor(const LogInt& dst, const LogInt& src);
+  void LogAssOp(const LogInt& dst, const LogInt& src) override;
 
-  void LogAssOp(const LogInt& dst, const LogInt& src);
-
-  void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op);
-  void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op);
-  void LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op);
-  void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res);
+  void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) override;
+  void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) override;
+  void LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) override;
+  void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) override;
 
  private:
   ConLogger() = default;
 
-  void LogShift();
-  void LogElem(const LogInt& elem);
-  void LogValue(const LogInt& elem);
+  void LogShift() override;
+  void LogElem(const LogInt& elem) override;
+  void LogValue(const LogInt& elem) override;
+
+  virtual void SetDefault() = 0;
+  virtual void SetRedBlink() = 0;
+  virtual void SetGreen() = 0;
+  virtual void SetYellowBold() = 0;
 
   static size_t depth_;
   bool is_for_func_ = false;
 };
-
-#define FUNC_CON_LOG ConLogger logger(__PRETTY_FUNCTION__)
-
-#define FUNC_CON_LOG_NL \
-  ConLogger logger(__PRETTY_FUNCTION__); \
-  printf("\n");
-
-void SetDefault();
-void SetRedBlink();
-void SetGreen();
-void SetYellowBold();
 
 #endif /* con_logger.hpp */
