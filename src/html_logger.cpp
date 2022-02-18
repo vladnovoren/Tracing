@@ -16,7 +16,7 @@ void HTMLLogger::LogDefaultCtor(const LogInt& elem) {
     SetRedBlink();
   }
   fprintf(log_file_, "(New) ");
-  fprintf(log_file_, "%s", elem.GetName().c_str());
+  LogName(elem);
   if (elem.IsImp()) {
     SetDefault();
   }
@@ -33,7 +33,7 @@ void HTMLLogger::LogValueCtor(const LogInt& elem) {
     SetRedBlink();
   }
   fprintf(log_file_, "(New) ");
-  fprintf(log_file_, "%s", elem.GetName().c_str());
+  LogName(elem);
   if (elem.IsImp()) {
     SetDefault();
   }
@@ -51,11 +51,13 @@ void HTMLLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
     SetRedBlink();
   }
   fprintf(log_file_, "(New) ");
-  fprintf(log_file_, "%s", dst.GetName().c_str());
+  LogName(dst);
   if (dst.IsImp()) {
     SetDefault();
   }
-  fprintf(log_file_, "(%s) ", src.GetName().c_str());
+  fprintf(log_file_, "(");
+  LogName(src);
+  fprintf(log_file_, ") ");
   fprintf(log_file_, "{");
   LogValue(dst);
   fprintf(log_file_, "} ");
@@ -67,8 +69,10 @@ void HTMLLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
 
 void HTMLLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
   LogShift();
-  fprintf(log_file_, "%s = %s ", dst.GetName().c_str(), src.GetName().c_str());
-  fprintf(log_file_, "{");
+  LogName(dst);
+  fprintf(log_file_, " = ");
+  LogName(src);
+  fprintf(log_file_, " {");
   LogValue(dst);
   fprintf(log_file_, "} ");
   LogElem(dst);
@@ -83,12 +87,13 @@ void HTMLLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const s
     SetRedBlink();
   }
   fprintf(log_file_, "(New) ");
-  fprintf(log_file_, "%s", elem.GetName().c_str());
+  LogName(elem);
   if (elem.IsImp()) {
     SetDefault();
   }
-  fprintf(log_file_, " = %s%s ", op.c_str(), parent.GetName().c_str());
-  fprintf(log_file_, "{");
+  fprintf(log_file_, " = %s ", op.c_str());
+  LogName(parent);
+  fprintf(log_file_, " {");
   LogValue(elem);
   fprintf(log_file_, "} ");
   LogElem(elem);
@@ -103,11 +108,15 @@ void HTMLLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const
     SetRedBlink();
   }
   fprintf(log_file_, "(New) ");
-  fprintf(log_file_, "%s", elem.GetName().c_str());
+  LogName(elem);
   if (elem.IsImp()) {
     SetDefault();
   }
-  fprintf(log_file_, " = %s %s %s ", parent1.GetName().c_str(), op.c_str(), parent2.GetName().c_str());
+  fprintf(log_file_, " = ");
+  LogName(parent1);
+  fprintf(log_file_, " %s ", op.c_str());
+  LogName(parent2);
+  fprintf(log_file_, " ");
   fprintf(log_file_, "{");
   LogValue(elem);
   fprintf(log_file_, "} ");
@@ -162,6 +171,10 @@ void HTMLLogger::LogElem(const LogInt& elem) {
 
 void HTMLLogger::LogValue(const LogInt& elem) {
   fprintf(log_file_, "%s.value_ = %d", elem.GetName().c_str(), elem.value_);
+}
+
+void HTMLLogger::LogName(const LogInt& elem) {
+  fprintf(log_file_, "<h title=\"%s\">%s</h>", elem.GetHistory().c_str(), elem.GetName().c_str());
 }
 
 void HTMLLogger::SetDefault() {

@@ -6,18 +6,21 @@ size_t LogInt::imp_num_ = 0;
 LogInt::LogInt(const std::string& name) {
   FUNC_LOG;
   SetName(name);
+  history_ += name_ + "(" + std::to_string(value_) + ")";
   ILogger::curr_logger_->LogDefaultCtor(*this);
 }
 
 LogInt::LogInt(const int value, const std::string& name): value_(value) {
   FUNC_LOG;
   SetName(name);
+  history_ += name_ + "(" + std::to_string(value) + ")";
   ILogger::curr_logger_->LogValueCtor(*this);
 }
 
 LogInt::LogInt(const LogInt& other, const std::string& name): value_(other.value_) {
   FUNC_LOG;
   SetName(name);
+  history_ += name_ + "(" + other.history_ + ")";
   ILogger::curr_logger_->LogCopyCtor(*this, other);
 }
 
@@ -26,6 +29,10 @@ LogInt::~LogInt() {
 
 const std::string& LogInt::GetName() const {
   return name_;
+}
+
+const std::string& LogInt::GetHistory() const {
+  return history_;
 }
 
 size_t LogInt::GetNum() const {
@@ -43,25 +50,27 @@ const char* LogInt::GetTypeStr() const {
 LogInt& LogInt::operator=(const LogInt& other) {
   FUNC_LOG;
   value_ = other.value_;
+  history_ = other.history_;
   ILogger::curr_logger_->LogAssOp(*this, other);
   return *this;
 }
 
 #define UNARY_OPTOR(op) \
 LogInt LogInt::operator op() const { \
-  return LogInt(*this, op value_, #op); \
+  return LogInt(*this, op value_, #op, #op + history_); \
 }
 
 #define BINARY_OPTOR(op) \
 LogInt LogInt::operator op(const LogInt& other) const { \
   FUNC_LOG; \
-  return LogInt(*this, other, this->value_ op other.value_, #op); \
+  return LogInt(*this, other, this->value_ op other.value_, #op, "(" + history_ + ") " + #op + " (" + other.history_ + ")"); \
 }
 
 #define BINARY_ASS_OPTOR(op) \
 LogInt& LogInt::operator op(const LogInt& other) { \
   FUNC_LOG; \
   value_ op other.value_; \
+  history_ = "(" + history_ + ") " + #op + " (" + other.history_ + ")"; \
   ILogger::curr_logger_->LogBinaryAssOptor(*this, other, #op); \
   return *this; \
 }
@@ -80,12 +89,12 @@ bool LogInt::operator op(const LogInt& other) const { \
 #undef BINARY_ASS_OPTOR
 #undef BINARY_COMP_OPTOR
 
-LogInt::LogInt(const LogInt& parent, const int value, const std::string& op): value_(value) {
+LogInt::LogInt(const LogInt& parent, const int value, const std::string& op, const std::string& history): value_(value), history_(history) {
   SetName();
   ILogger::curr_logger_->LogUnaryOptor(*this, parent, op);
 }
 
-LogInt::LogInt(const LogInt& parent1, const LogInt& parent2, const int value, const std::string& op): value_(value) {
+LogInt::LogInt(const LogInt& parent1, const LogInt& parent2, const int value, const std::string& op, const std::string& history): value_(value), history_(history) {
   SetName();
   ILogger::curr_logger_->LogBinaryOptor(*this, parent1, parent2, op);
 }

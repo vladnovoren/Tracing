@@ -34,6 +34,8 @@ class HTMLLogger: public ILogger {
   void LogElem(const LogInt& elem) override;
   void LogValue(const LogInt& elem) override;
 
+  void LogName(const LogInt& elem);
+
   void SetDefault() override;
   void SetRedBlink() override;
   void SetGreen() override;

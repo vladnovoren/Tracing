@@ -16,6 +16,7 @@ class LogInt {
   ~LogInt();
 
   const std::string& GetName() const;
+  const std::string& GetHistory() const;
   size_t GetNum() const;
   bool IsImp() const;
   const char* GetTypeStr() const;
@@ -45,14 +46,16 @@ class LogInt {
 
  private:
   // for unary operators
-  LogInt(const LogInt& parent, const int value, const std::string& op);
+  LogInt(const LogInt& parent, const int value, const std::string& op, const std::string& history);
   // for binary operators
-  LogInt(const LogInt& parent1, const LogInt& parent2, const int value, const std::string& op);
+  LogInt(const LogInt& parent1, const LogInt& parent2, const int value, const std::string& op, const std::string& history);
 
   void SetName(const std::string& name = "");
   void LogName();
 
   std::string name_ = "";
+  std::string history_ = "";
+
   static size_t exp_num_;
   static size_t imp_num_;
 
@@ -60,12 +63,8 @@ class LogInt {
 };
 
 #define LOG_INT_DECL(var) LogInt var(#var)
-
 #define LOG_INT_INIT_BY_VALUE(var, value) LogInt var(value, #var)
-
 #define LOG_INT_INIT_BY_COPY(var, other) LogInt var(other, #var)
 
-
-// #define 
 
 #endif /* log_int.hpp */
