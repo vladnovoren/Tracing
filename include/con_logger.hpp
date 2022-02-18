@@ -10,7 +10,6 @@ class LogInt;
 
 class ConLogger: public ILogger {
  public:
-  ConLogger() = default;
   ~ConLogger();
 
   void LogDefaultCtor(const LogInt& elem) override;
@@ -24,17 +23,18 @@ class ConLogger: public ILogger {
   void LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) override;
   void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) override;
 
- private:
-  ConLogger() = default;
+  void LogFuncEntry(const std::string& func) override;
+  void LogFuncEnd() override;
 
+ private:
   void LogShift() override;
   void LogElem(const LogInt& elem) override;
   void LogValue(const LogInt& elem) override;
 
-  virtual void SetDefault() = 0;
-  virtual void SetRedBlink() = 0;
-  virtual void SetGreen() = 0;
-  virtual void SetYellowBold() = 0;
+  void SetDefault() override;
+  void SetRedBlink() override;
+  void SetGreen() override;
+  void SetYellowBold() override;
 
   static size_t depth_;
   bool is_for_func_ = false;

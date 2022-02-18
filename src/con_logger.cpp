@@ -3,7 +3,6 @@
 
 size_t ConLogger::depth_ = 0;
 
-
 void ConLogger::LogDefaultCtor(const LogInt& elem) {
   LogShift();
   if (elem.IsImp()) {
@@ -120,6 +119,18 @@ void ConLogger::LogCompOptor(const LogInt& elem, const LogInt& other, const std:
   printf(" ");
   LogElem(other);
   printf("\n");
+}
+
+void ConLogger::LogFuncEntry(const std::string& func) {
+  LogShift();
+  ++depth_;
+  printf("%s {\n", func.c_str());
+}
+
+void ConLogger::LogFuncEnd() {
+  --depth_;
+  LogShift();
+  printf("}\n");
 }
 
 void ConLogger::LogShift() {

@@ -19,6 +19,8 @@ add_link_options(
 project(Tracing)
 
 set(TRACING_SOURCE src/con_logger.cpp
+                   src/func_logger.cpp
+                   src/ilogger.cpp
                    src/log_int.cpp)
 
 add_executable(Tracing ${TRACING_SOURCE} src/main.cpp)

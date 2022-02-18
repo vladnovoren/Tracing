@@ -12,7 +12,7 @@ class ILogger {
   ILogger(const char* func);
   ~ILogger();
 
-  static ILogger* curr_logger = nullptr;
+  static ILogger* curr_logger;
 
   static size_t GetDepth();
 
@@ -45,12 +45,6 @@ class ILogger {
   static size_t depth_;
   bool is_for_func_ = false;
 };
-
-#define FUNC_CON_LOG ILogger logger(__PRETTY_FUNCTION__)
-
-#define FUNC_CON_LOG_NL \
-  ILogger logger(__PRETTY_FUNCTION__); \
-  printf("\n");
 
 void SetDefault();
 void SetRedBlink();

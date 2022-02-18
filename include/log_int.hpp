@@ -1,7 +1,7 @@
 #ifndef LOG_INT_HPP
 #define LOG_INT_HPP
 
-#include "con_logger.hpp"
+#include "ilogger.hpp"
 #include <string>
 
 static const char* const EXP = "EXP";

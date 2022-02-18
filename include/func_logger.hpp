@@ -5,13 +5,10 @@
 
 class FuncLogger {
  public:
-  FuncLogger(const std::string& func) {
-    ILogger::curr_logger->LogFuncEntry(func);
-  }
-
-  ~FuncLogger() {
-    ILogger::curr_logger->LogFuncEnd();
-  }
+  FuncLogger(const std::string& func);
+  ~FuncLogger();
 };
+
+#define FUNC_CON_LOG FuncLogger func_logger(__PRETTY_FUNCTION__)
 
 #endif /* func_logger.hpp */
