@@ -4,16 +4,19 @@ size_t LogInt::exp_num_ = 0;
 size_t LogInt::imp_num_ = 0;
 
 LogInt::LogInt(const std::string& name) {
+  FUNC_LOG;
   SetName(name);
   ILogger::curr_logger_->LogDefaultCtor(*this);
 }
 
 LogInt::LogInt(const int value, const std::string& name): value_(value) {
+  FUNC_LOG;
   SetName(name);
   ILogger::curr_logger_->LogValueCtor(*this);
 }
 
 LogInt::LogInt(const LogInt& other, const std::string& name): value_(other.value_) {
+  FUNC_LOG;
   SetName(name);
   ILogger::curr_logger_->LogCopyCtor(*this, other);
 }
@@ -38,6 +41,7 @@ const char* LogInt::GetTypeStr() const {
 }
 
 LogInt& LogInt::operator=(const LogInt& other) {
+  FUNC_LOG;
   value_ = other.value_;
   ILogger::curr_logger_->LogAssOp(*this, other);
   return *this;
@@ -50,11 +54,13 @@ LogInt LogInt::operator op() const { \
 
 #define BINARY_OPTOR(op) \
 LogInt LogInt::operator op(const LogInt& other) const { \
+  FUNC_LOG; \
   return LogInt(*this, other, this->value_ op other.value_, #op); \
 }
 
 #define BINARY_ASS_OPTOR(op) \
 LogInt& LogInt::operator op(const LogInt& other) { \
+  FUNC_LOG; \
   value_ op other.value_; \
   ILogger::curr_logger_->LogBinaryAssOptor(*this, other, #op); \
   return *this; \
@@ -62,6 +68,7 @@ LogInt& LogInt::operator op(const LogInt& other) { \
 
 #define BINARY_COMP_OPTOR(op) \
 bool LogInt::operator op(const LogInt& other) const { \
+  FUNC_LOG; \
   ILogger::curr_logger_->LogCompOptor(*this, other, #op, value_ op other.value_); \
   return value_ op other.value_; \
 }

@@ -13,6 +13,9 @@ LogIniter::LogIniter(const LogType log_type) {
     case LogType::CONSOLE:
       ILogger::curr_logger_ = new ConLogger;
       break;
+    case LogType::HTML:
+      ILogger::curr_logger_ = new HTMLLogger;
+      break;
   }
 }
 
@@ -26,6 +29,9 @@ void LogIniter::SwitchLogType(const LogType log_type) {
     switch (log_type) {
       case LogType::CONSOLE:
         ILogger::curr_logger_ = new ConLogger;
+        break;
+      case LogType::HTML:
+        ILogger::curr_logger_ = new HTMLLogger;
         break;
     }
   }

@@ -3,9 +3,11 @@
 
 #include "ilogger.hpp"
 #include "con_logger.hpp"
+#include "html_logger.hpp"
 
 enum class LogType {
-  CONSOLE
+  CONSOLE,
+  HTML
 };
 
 class LogIniter {

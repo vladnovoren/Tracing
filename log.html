@@ -1,0 +1,82 @@
+<pre>
+int main() {
+  LogInt Fib(const size_t) {
+    LogInt Fib(const size_t) {
+      LogInt Fib(const size_t) {
+        LogInt Fib(const size_t) {
+          LogInt Fib(const size_t) {
+            LogInt::LogInt(const int, const std::string &) {
+              <span class="blinking"><font color=#FF0000>(New) IMP#1</font></span>(1) {IMP#1.value_ = 1} IMP#1[0x7ffdd8c80cf0]
+            }
+          }
+          LogInt Fib(const size_t) {
+            LogInt::LogInt(const int, const std::string &) {
+              <span class="blinking"><font color=#FF0000>(New) IMP#2</font></span>(1) {IMP#2.value_ = 1} IMP#2[0x7ffdd8c80d40]
+            }
+          }
+          LogInt LogInt::operator+(const LogInt &) const {
+            <span class="blinking"><font color=#FF0000>(New) IMP#3</font></span> = IMP#1 + IMP#2 {IMP#3.value_ = 2} IMP#3[0x7ffdd8c80f70] IMP#1[0x7ffdd8c80cf0] IMP#2[0x7ffdd8c80d40]
+          }
+        }
+        LogInt Fib(const size_t) {
+          LogInt::LogInt(const int, const std::string &) {
+            <span class="blinking"><font color=#FF0000>(New) IMP#4</font></span>(1) {IMP#4.value_ = 1} IMP#4[0x7ffdd8c80fc0]
+          }
+        }
+        LogInt LogInt::operator+(const LogInt &) const {
+          <span class="blinking"><font color=#FF0000>(New) IMP#5</font></span> = IMP#3 + IMP#4 {IMP#5.value_ = 3} IMP#5[0x7ffdd8c811f0] IMP#3[0x7ffdd8c80f70] IMP#4[0x7ffdd8c80fc0]
+        }
+      }
+      LogInt Fib(const size_t) {
+        LogInt Fib(const size_t) {
+          LogInt::LogInt(const int, const std::string &) {
+            <span class="blinking"><font color=#FF0000>(New) IMP#6</font></span>(1) {IMP#6.value_ = 1} IMP#6[0x7ffdd8c80f70]
+          }
+        }
+        LogInt Fib(const size_t) {
+          LogInt::LogInt(const int, const std::string &) {
+            <span class="blinking"><font color=#FF0000>(New) IMP#7</font></span>(1) {IMP#7.value_ = 1} IMP#7[0x7ffdd8c80fc0]
+          }
+        }
+        LogInt LogInt::operator+(const LogInt &) const {
+          <span class="blinking"><font color=#FF0000>(New) IMP#8</font></span> = IMP#6 + IMP#7 {IMP#8.value_ = 2} IMP#8[0x7ffdd8c81240] IMP#6[0x7ffdd8c80f70] IMP#7[0x7ffdd8c80fc0]
+        }
+      }
+      LogInt LogInt::operator+(const LogInt &) const {
+        <span class="blinking"><font color=#FF0000>(New) IMP#9</font></span> = IMP#5 + IMP#8 {IMP#9.value_ = 5} IMP#9[0x7ffdd8c81470] IMP#5[0x7ffdd8c811f0] IMP#8[0x7ffdd8c81240]
+      }
+    }
+    LogInt Fib(const size_t) {
+      LogInt Fib(const size_t) {
+        LogInt Fib(const size_t) {
+          LogInt::LogInt(const int, const std::string &) {
+            <span class="blinking"><font color=#FF0000>(New) IMP#10</font></span>(1) {IMP#10.value_ = 1} IMP#10[0x7ffdd8c80f70]
+          }
+        }
+        LogInt Fib(const size_t) {
+          LogInt::LogInt(const int, const std::string &) {
+            <span class="blinking"><font color=#FF0000>(New) IMP#11</font></span>(1) {IMP#11.value_ = 1} IMP#11[0x7ffdd8c80fc0]
+          }
+        }
+        LogInt LogInt::operator+(const LogInt &) const {
+          <span class="blinking"><font color=#FF0000>(New) IMP#12</font></span> = IMP#10 + IMP#11 {IMP#12.value_ = 2} IMP#12[0x7ffdd8c811f0] IMP#10[0x7ffdd8c80f70] IMP#11[0x7ffdd8c80fc0]
+        }
+      }
+      LogInt Fib(const size_t) {
+        LogInt::LogInt(const int, const std::string &) {
+          <span class="blinking"><font color=#FF0000>(New) IMP#13</font></span>(1) {IMP#13.value_ = 1} IMP#13[0x7ffdd8c81240]
+        }
+      }
+      LogInt LogInt::operator+(const LogInt &) const {
+        <span class="blinking"><font color=#FF0000>(New) IMP#14</font></span> = IMP#12 + IMP#13 {IMP#14.value_ = 3} IMP#14[0x7ffdd8c814c0] IMP#12[0x7ffdd8c811f0] IMP#13[0x7ffdd8c81240]
+      }
+    }
+    LogInt LogInt::operator+(const LogInt &) const {
+      <span class="blinking"><font color=#FF0000>(New) IMP#15</font></span> = IMP#9 + IMP#14 {IMP#15.value_ = 8} IMP#15[0x7ffdd8c816f0] IMP#9[0x7ffdd8c81470] IMP#14[0x7ffdd8c814c0]
+    }
+  }
+  LogInt::LogInt(const LogInt &, const std::string &) {
+    (New) res#1(IMP#15) {res#1.value_ = 8} res#1[0x7ffdd8c816a0] IMP#15[0x7ffdd8c816f0]
+  }
+}
+</pre>

@@ -2,6 +2,7 @@
 #define LOG_INT_HPP
 
 #include "ilogger.hpp"
+#include "func_logger.hpp"
 #include <string>
 
 static const char* const EXP = "EXP";

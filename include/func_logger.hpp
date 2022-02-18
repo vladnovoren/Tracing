@@ -9,6 +9,6 @@ class FuncLogger {
   ~FuncLogger();
 };
 
-#define FUNC_CON_LOG FuncLogger func_logger(__PRETTY_FUNCTION__)
+#define FUNC_LOG FuncLogger func_logger(__PRETTY_FUNCTION__)
 
 #endif /* func_logger.hpp */

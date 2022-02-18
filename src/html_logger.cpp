@@ -1,0 +1,192 @@
+#include "html_logger.hpp"
+
+HTMLLogger::HTMLLogger() {
+  log_file_ = fopen("log.html", "w");
+  fprintf(log_file_, "<pre>\n");
+}
+
+HTMLLogger::~HTMLLogger() {
+  fprintf(log_file_, "</pre>");
+  fclose(log_file_);
+}
+
+void HTMLLogger::LogDefaultCtor(const LogInt& elem) {
+  LogShift();
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  fprintf(log_file_, "(New) ");
+  fprintf(log_file_, "%s", elem.GetName().c_str());
+  if (elem.IsImp()) {
+    SetDefault();
+  }
+  fprintf(log_file_, " {");
+  LogValue(elem);
+  fprintf(log_file_, "} ");
+  LogElem(elem);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogValueCtor(const LogInt& elem) {
+  LogShift();
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  fprintf(log_file_, "(New) ");
+  fprintf(log_file_, "%s", elem.GetName().c_str());
+  if (elem.IsImp()) {
+    SetDefault();
+  }
+  fprintf(log_file_, "(%d) ", elem.value_);
+  fprintf(log_file_, "{");
+  LogValue(elem);
+  fprintf(log_file_, "} ");
+  LogElem(elem);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
+  LogShift();
+  if (dst.IsImp()) {
+    SetRedBlink();
+  }
+  fprintf(log_file_, "(New) ");
+  fprintf(log_file_, "%s", dst.GetName().c_str());
+  if (dst.IsImp()) {
+    SetDefault();
+  }
+  fprintf(log_file_, "(%s) ", src.GetName().c_str());
+  fprintf(log_file_, "{");
+  LogValue(dst);
+  fprintf(log_file_, "} ");
+  LogElem(dst);
+  fprintf(log_file_, " ");
+  LogElem(src);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
+  LogShift();
+  fprintf(log_file_, "%s = %s ", dst.GetName().c_str(), src.GetName().c_str());
+  fprintf(log_file_, "{");
+  LogValue(dst);
+  fprintf(log_file_, "} ");
+  LogElem(dst);
+  fprintf(log_file_, " ");
+  LogElem(src);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) {
+  LogShift();
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  fprintf(log_file_, "(New) ");
+  fprintf(log_file_, "%s", elem.GetName().c_str());
+  if (elem.IsImp()) {
+    SetDefault();
+  }
+  fprintf(log_file_, " = %s%s ", op.c_str(), parent.GetName().c_str());
+  fprintf(log_file_, "{");
+  LogValue(elem);
+  fprintf(log_file_, "} ");
+  LogElem(elem);
+  fprintf(log_file_, " ");
+  LogElem(parent);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) {
+  LogShift();
+  if (elem.IsImp()) {
+    SetRedBlink();
+  }
+  fprintf(log_file_, "(New) ");
+  fprintf(log_file_, "%s", elem.GetName().c_str());
+  if (elem.IsImp()) {
+    SetDefault();
+  }
+  fprintf(log_file_, " = %s %s %s ", parent1.GetName().c_str(), op.c_str(), parent2.GetName().c_str());
+  fprintf(log_file_, "{");
+  LogValue(elem);
+  fprintf(log_file_, "} ");
+  LogElem(elem);
+  fprintf(log_file_, " ");
+  LogElem(parent1);
+  fprintf(log_file_, " ");
+  LogElem(parent2);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) {
+  LogShift();
+  fprintf(log_file_, "%s %s %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str());
+  fprintf(log_file_, "{");
+  LogValue(elem);
+  fprintf(log_file_, "} ");
+  LogElem(other);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) {
+  LogShift();
+  fprintf(log_file_, "%s %s %s - %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str(), res ? "true" : "false");
+  LogElem(elem);
+  fprintf(log_file_, " ");
+  LogElem(other);
+  fprintf(log_file_, "\n");
+}
+
+void HTMLLogger::LogFuncEntry(const std::string& func) {
+  LogShift();
+  ++depth_;
+  fprintf(log_file_, "%s {\n", func.c_str());
+}
+
+void HTMLLogger::LogFuncEnd() {
+  --depth_;
+  LogShift();
+  fprintf(log_file_, "}\n");
+}
+
+void HTMLLogger::LogShift() {
+  for (size_t i = 0; i < depth_; ++i) {
+    fprintf(log_file_, "  ");
+  }
+}
+
+void HTMLLogger::LogElem(const LogInt& elem) {
+  fprintf(log_file_, "%s[%p]", elem.GetName().c_str(), static_cast<const void*>(&elem));
+}
+
+void HTMLLogger::LogValue(const LogInt& elem) {
+  fprintf(log_file_, "%s.value_ = %d", elem.GetName().c_str(), elem.value_);
+}
+
+void HTMLLogger::SetDefault() {
+  fprintf(log_file_, "</font>");
+  if (is_bold_) {
+    fprintf(log_file_, "</b>");
+    is_bold_ = false;
+  }
+  if (is_blink_) {
+    fprintf(log_file_, "</span>");
+    is_blink_ = false;
+  }
+}
+
+void HTMLLogger::SetGreen() {
+  fprintf(log_file_, "<font color=#00FF00>");
+}
+
+void HTMLLogger::SetRedBlink() {
+  fprintf(log_file_, "<span class=\"blinking\">");
+  is_blink_ = true;
+  fprintf(log_file_, "<font color=#FF0000>");
+}
+
+void HTMLLogger::SetYellowBold() {
+  fprintf(log_file_, "<b>");
+  fprintf(log_file_, "<font color=#FFFF00>");
+}

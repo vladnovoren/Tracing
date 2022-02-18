@@ -2,26 +2,27 @@
 #include "con_logger.hpp"
 #include "log_int.hpp"
 #include "log_initer.hpp"
+#include "html_logger.hpp"
 
 void Func(const int*, size_t) {
-  FUNC_CON_LOG;
+  FUNC_LOG;
 }
 
-LogInt Rec(const size_t n) {
-  FUNC_CON_LOG;
+LogInt Fib(const size_t n) {
+  FUNC_LOG;
   if (n <= 1) {
     return 1;
   } else {
-    return Rec(n - 1) + Rec(n - 1) / Rec(n - 2);
+    return Fib(n - 1) + Fib(n - 2);
   }
 }
 
 int main() {
-  LogIniter::GetInstance();
+  LogIniter::GetInstance(LogType::HTML);
 
-  FUNC_CON_LOG;
+  FUNC_LOG;
 
-  LOG_INT_INIT_BY_COPY(res, Rec(5));
+  LOG_INT_INIT_BY_COPY(res, Fib(5));
 
   return 0;
 }
