@@ -1,17 +1,15 @@
-#ifndef CON_LOGGER_HPP
-#define CON_LOGGER_HPP
+#ifndef GV_LOGGER_HPP
+#define GV_LOGGER_HPP
 
-#include <cstdio>
-#include <cassert>
-#include <string>
-#include "itext_logger.hpp"
+#include <cstdlib>
+#include <map>
+#include "ilogger.hpp"
+#include "log_int.hpp"
 
-class LogInt;
-
-class ConLogger: public ITextLogger {
+class GVLogger: public ILogger {
  public:
-  ConLogger() = default;
-  ~ConLogger() override = default;
+  GVLogger();
+  ~GVLogger();
 
   void LogDefaultCtor(const LogInt& elem) override;
   void LogValueCtor(const LogInt& elem) override;
@@ -27,15 +25,18 @@ class ConLogger: public ITextLogger {
   void LogFuncEntry(const std::string& func) override;
   void LogFuncEnd() override;
 
- private:
+ protected:
   void LogShift() override;
   void LogElem(const LogInt& elem) override;
   void LogValue(const LogInt& elem) override;
 
-  void SetDefaultText() override;
-  void SetRedBlinkText() override;
-  void SetGreenText() override;
-  void SetYellowBoldText() override;
+  const char* GetElemColor(const LogInt& elem);
+
+  FILE* log_file_ = nullptr;
+  size_t funcs_cnt_ = 0;
+
+  std::map<size_t, size_t> node_match_;
+  size_t last_node_id_ = 0;
 };
 
-#endif /* con_logger.hpp */
+#endif /* gv_logger.hpp */

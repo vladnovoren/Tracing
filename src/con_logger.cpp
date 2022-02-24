@@ -4,11 +4,11 @@
 void ConLogger::LogDefaultCtor(const LogInt& elem) {
   LogShift();
   if (elem.IsImp()) {
-    SetRedBlink();
+    SetRedBlinkText();
   }
   printf("(New) ");
   printf("%s", elem.GetName().c_str());
-  SetDefault();
+  SetDefaultText();
   printf(" {");
   LogValue(elem);
   printf("} ");
@@ -19,11 +19,11 @@ void ConLogger::LogDefaultCtor(const LogInt& elem) {
 void ConLogger::LogValueCtor(const LogInt& elem) {
   LogShift();
   if (elem.IsImp()) {
-    SetRedBlink();
+    SetRedBlinkText();
   }
   printf("(New) ");
   printf("%s", elem.GetName().c_str());
-  SetDefault();
+  SetDefaultText();
   printf("(%d) ", elem.value_);
   printf("{");
   LogValue(elem);
@@ -35,11 +35,11 @@ void ConLogger::LogValueCtor(const LogInt& elem) {
 void ConLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   LogShift();
   if (dst.IsImp()) {
-    SetRedBlink();
+    SetRedBlinkText();
   }
   printf("(New) ");
   printf("%s", dst.GetName().c_str());
-  SetDefault();
+  SetDefaultText();
   printf("(%s) ", src.GetName().c_str());
   printf("{");
   LogValue(dst);
@@ -65,11 +65,11 @@ void ConLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
 void ConLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) {
   LogShift();
   if (elem.IsImp()) {
-    SetRedBlink();
+    SetRedBlinkText();
   }
   printf("(New) ");
   printf("%s", elem.GetName().c_str());
-  SetDefault();
+  SetDefaultText();
   printf(" = %s%s ", op.c_str(), parent.GetName().c_str());
   printf("{");
   LogValue(elem);
@@ -83,11 +83,11 @@ void ConLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const st
 void ConLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) {
   LogShift();
   if (elem.IsImp()) {
-    SetRedBlink();
+    SetRedBlinkText();
   }
   printf("(New) ");
   printf("%s", elem.GetName().c_str());
-  SetDefault();
+  SetDefaultText();
   printf(" = %s %s %s ", parent1.GetName().c_str(), op.c_str(), parent2.GetName().c_str());
   printf("{");
   LogValue(elem);
@@ -145,18 +145,18 @@ void ConLogger::LogValue(const LogInt& elem) {
   printf("%s.value_ = %d", elem.GetName().c_str(), elem.value_);
 }
 
-void ConLogger::SetDefault() {
+void ConLogger::SetDefaultText() {
   printf("\x1b[0m");
 }
 
-void ConLogger::SetRedBlink() {
+void ConLogger::SetRedBlinkText() {
   printf("\x1b[5;33m");
 }
 
-void ConLogger::SetGreen() {
+void ConLogger::SetGreenText() {
   printf("\x1b[32m");
 }
 
-void ConLogger::SetYellowBold() {
+void ConLogger::SetYellowBoldText() {
   printf("\x1b[1;33m");
 }

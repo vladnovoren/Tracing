@@ -35,11 +35,6 @@ class ILogger {
   virtual void LogElem(const LogInt& elem) = 0;
   virtual void LogValue(const LogInt& elem) = 0;
 
-  virtual void SetDefault() = 0;
-  virtual void SetRedBlink() = 0;
-  virtual void SetGreen() = 0;
-  virtual void SetYellowBold() = 0;
-
   static size_t depth_;
 };
 

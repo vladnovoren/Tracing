@@ -6,11 +6,12 @@
 #include <cassert>
 #include <string>
 #include "ilogger.hpp"
+#include "itext_logger.hpp"
 #include "log_int.hpp"
 
 class LogInt;
 
-class HTMLLogger: public ILogger {
+class HTMLLogger: public ITextLogger {
  public:
   HTMLLogger();
   ~HTMLLogger() override;
@@ -36,10 +37,10 @@ class HTMLLogger: public ILogger {
 
   void LogName(const LogInt& elem);
 
-  void SetDefault() override;
-  void SetRedBlink() override;
-  void SetGreen() override;
-  void SetYellowBold() override;
+  void SetDefaultText() override;
+  void SetRedBlinkText() override;
+  void SetGreenText() override;
+  void SetYellowBoldText() override;
 
   FILE* log_file_ = nullptr;
 

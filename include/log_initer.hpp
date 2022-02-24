@@ -4,10 +4,12 @@
 #include "ilogger.hpp"
 #include "con_logger.hpp"
 #include "html_logger.hpp"
+#include "gv_logger.hpp"
 
 enum class LogType {
   CONSOLE,
-  HTML
+  HTML,
+  GV
 };
 
 class LogIniter {

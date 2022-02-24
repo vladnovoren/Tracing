@@ -24,5 +24,9 @@ int main() {
 
   LOG_INT_INIT_BY_COPY(res, Fib(5));
 
+  LogInt a(5), b(5), c(5);
+  a = a + b;
+
+
   return 0;
 }
