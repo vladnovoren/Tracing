@@ -10,7 +10,7 @@ void ConLogger::LogDefaultCtor(const LogInt& elem) {
   printf("%s", elem.GetName().c_str());
   SetDefaultText();
   printf(" {");
-  LogValue(elem);
+  LogElemValue(elem);
   printf("} ");
   LogElem(elem);
   printf("\n");
@@ -26,7 +26,7 @@ void ConLogger::LogValueCtor(const LogInt& elem) {
   SetDefaultText();
   printf("(%d) ", elem.value_);
   printf("{");
-  LogValue(elem);
+  LogElemValue(elem);
   printf("} ");
   LogElem(elem);
   printf("\n");
@@ -42,7 +42,7 @@ void ConLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   SetDefaultText();
   printf("(%s) ", src.GetName().c_str());
   printf("{");
-  LogValue(dst);
+  LogElemValue(dst);
   printf("} ");
   LogElem(dst);
   printf(" ");
@@ -54,7 +54,7 @@ void ConLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
   LogShift();
   printf("%s = %s ", dst.GetName().c_str(), src.GetName().c_str());
   printf("{");
-  LogValue(dst);
+  LogElemValue(dst);
   printf("} ");
   LogElem(dst);
   printf(" ");
@@ -72,7 +72,7 @@ void ConLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const st
   SetDefaultText();
   printf(" = %s%s ", op.c_str(), parent.GetName().c_str());
   printf("{");
-  LogValue(elem);
+  LogElemValue(elem);
   printf("} ");
   LogElem(elem);
   printf(" ");
@@ -90,7 +90,7 @@ void ConLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const 
   SetDefaultText();
   printf(" = %s %s %s ", parent1.GetName().c_str(), op.c_str(), parent2.GetName().c_str());
   printf("{");
-  LogValue(elem);
+  LogElemValue(elem);
   printf("} ");
   LogElem(elem);
   printf(" ");
@@ -104,7 +104,7 @@ void ConLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const
   LogShift();
   printf("%s %s %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str());
   printf("{");
-  LogValue(elem);
+  LogElemValue(elem);
   printf("} ");
   LogElem(other);
   printf("\n");
@@ -141,7 +141,7 @@ void ConLogger::LogElem(const LogInt& elem) {
   printf("%s[%p]", elem.GetName().c_str(), static_cast<const void*>(&elem));
 }
 
-void ConLogger::LogValue(const LogInt& elem) {
+void ConLogger::LogElemValue(const LogInt& elem) {
   printf("%s.value_ = %d", elem.GetName().c_str(), elem.value_);
 }
 

@@ -18,7 +18,7 @@ LogInt Fib(const size_t n) {
 }
 
 int main() {
-  LogIniter::GetInstance(LogType::HTML);
+  LogIniter::GetInstance(LogType::GV);
 
   FUNC_LOG;
 

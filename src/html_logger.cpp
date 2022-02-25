@@ -21,7 +21,7 @@ void HTMLLogger::LogDefaultCtor(const LogInt& elem) {
     SetDefaultText();
   }
   fprintf(log_file_, " {");
-  LogValue(elem);
+  LogElemValue(elem);
   fprintf(log_file_, "} ");
   LogElem(elem);
   fprintf(log_file_, "\n");
@@ -39,7 +39,7 @@ void HTMLLogger::LogValueCtor(const LogInt& elem) {
   }
   fprintf(log_file_, "(%d) ", elem.value_);
   fprintf(log_file_, "{");
-  LogValue(elem);
+  LogElemValue(elem);
   fprintf(log_file_, "} ");
   LogElem(elem);
   fprintf(log_file_, "\n");
@@ -59,7 +59,7 @@ void HTMLLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   LogName(src);
   fprintf(log_file_, ") ");
   fprintf(log_file_, "{");
-  LogValue(dst);
+  LogElemValue(dst);
   fprintf(log_file_, "} ");
   LogElem(dst);
   fprintf(log_file_, " ");
@@ -73,7 +73,7 @@ void HTMLLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
   fprintf(log_file_, " = ");
   LogName(src);
   fprintf(log_file_, " {");
-  LogValue(dst);
+  LogElemValue(dst);
   fprintf(log_file_, "} ");
   LogElem(dst);
   fprintf(log_file_, " ");
@@ -94,7 +94,7 @@ void HTMLLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const s
   fprintf(log_file_, " = %s ", op.c_str());
   LogName(parent);
   fprintf(log_file_, " {");
-  LogValue(elem);
+  LogElemValue(elem);
   fprintf(log_file_, "} ");
   LogElem(elem);
   fprintf(log_file_, " ");
@@ -118,7 +118,7 @@ void HTMLLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const
   LogName(parent2);
   fprintf(log_file_, " ");
   fprintf(log_file_, "{");
-  LogValue(elem);
+  LogElemValue(elem);
   fprintf(log_file_, "} ");
   LogElem(elem);
   fprintf(log_file_, " ");
@@ -132,7 +132,7 @@ void HTMLLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, cons
   LogShift();
   fprintf(log_file_, "%s %s %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str());
   fprintf(log_file_, "{");
-  LogValue(elem);
+  LogElemValue(elem);
   fprintf(log_file_, "} ");
   LogElem(other);
   fprintf(log_file_, "\n");
@@ -169,7 +169,7 @@ void HTMLLogger::LogElem(const LogInt& elem) {
   fprintf(log_file_, "%s[%p]", elem.GetName().c_str(), static_cast<const void*>(&elem));
 }
 
-void HTMLLogger::LogValue(const LogInt& elem) {
+void HTMLLogger::LogElemValue(const LogInt& elem) {
   fprintf(log_file_, "%s.value_ = %d", elem.GetName().c_str(), elem.value_);
 }
 

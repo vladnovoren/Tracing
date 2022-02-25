@@ -33,7 +33,7 @@ class ILogger {
  protected:
   virtual void LogShift() = 0;
   virtual void LogElem(const LogInt& elem) = 0;
-  virtual void LogValue(const LogInt& elem) = 0;
+  virtual void LogElemValue(const LogInt& elem) = 0;
 
   static size_t depth_;
 };

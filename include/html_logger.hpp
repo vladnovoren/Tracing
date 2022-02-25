@@ -33,7 +33,7 @@ class HTMLLogger: public ITextLogger {
  private:
   void LogShift() override;
   void LogElem(const LogInt& elem) override;
-  void LogValue(const LogInt& elem) override;
+  void LogElemValue(const LogInt& elem) override;
 
   void LogName(const LogInt& elem);
 
