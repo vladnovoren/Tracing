@@ -26,16 +26,20 @@ class GVLogger: public ILogger {
   void LogFuncEnd() override;
 
  protected:
+  size_t FetchAddId();
+
   void LogNodesLink(const size_t src_node, const size_t dst_node);
 
-  void LogOptorNode(const std::string& name);
-  void LogCtorNode(const std::string& name);
+  size_t LogOptorNode(const std::string& name);
+  size_t LogCtorNode(const std::string& name);
 
   void LogShift() override;
   void LogElem(const LogInt& elem) override;
   void LogElemValue(const LogInt& elem) override;
   void LogElemName(const LogInt& elem);
   void LogElemAddress(const LogInt& elem);
+
+  size_t LogConnectPrevOccurrence(const LogInt& elem);
 
   const char* GetElemColor(const LogInt& elem);
 
