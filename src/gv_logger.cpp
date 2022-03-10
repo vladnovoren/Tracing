@@ -11,56 +11,76 @@ GVLogger::~GVLogger() {
 }
 
 void GVLogger::LogDefaultCtor(const LogInt& elem) {
-  size_t elem_id = LogConnectPrevOccurrence(elem);
-  size_t ctor_node_id = LogCtorNode("DefaultCtor");
+  size_t elem_node_id = NewOccurrence(elem);
   LogElem(elem);
-  fprintf(log_file_, "%zu -> %zu;\n", ctor_node_id, node_match_[elem.GetNum()]);
+
+  size_t ctor_node_id = LogCtorNode("DefaultCtor");
+  LogNodesLink(ctor_node_id, elem_node_id);
 }
 
 void GVLogger::LogValueCtor(const LogInt& elem) {
-  size_t elem_id = LogConnectPrevOccurrence(elem);
-  fprintf(log_file_, "%zu [label = <table border = \"1\" bgcolor = \"%s\">];\n", elem_id, GetElemColor(elem));
+  size_t elem_node_id = NewOccurrence(elem);
+  LogElem(elem);
+
+  size_t ctor_node_id = LogCtorNode("ValueCtor");
+  LogNodesLink(ctor_node_id, elem_node_id);
 }
 
 void GVLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
+  size_t dst_node_id = NewOccurrence(dst);
+  LogElem(dst);
 
-  fprintf(log_file_, "%zu [label = <table border = \"1\" bgcolor = \"%s\">\n];", , GetElemColor(dst));
-  fprintf(log_file_, "%zu -> %zu;\n", , );
-  ++last_node_id_;
+  size_t src_node_id = LastElemId(src);
+  size_t ctor_node_id = LogCtorNode("CopyCtor");
+
+  LogNodesLink(src_node_id, ctor_node_id);
+  LogNodesLink(ctor_node_id, dst_node_id);
 }
 
-void GVLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
-  fprintf(log_file_, "%zu [label = <table border = \"1\" bgcolor = \"%s\">\n];", last_node_id_, GetElemColor(dst));
-  node_match_[dst.GetNum()] = last_node_id_;
-  fprintf(log_file_, "%zu -> %zu;\n", node_match_[src.GetNum()], last_node_id_);
-  ++last_node_id_;
+void GVLogger::LogAssOptor(const LogInt& dst, const LogInt& src) {
+  size_t src_node_id = LastElemId(src);
+  size_t dst_node_id = NewOccurrence(dst);
+  LogElem(dst);
+
+  size_t optor_node_id = LogOptorNode("CopyAssOptor");
+
+  LogNodesLink(src_node_id, optor_node_id);
+  LogNodesLink(optor_node_id, dst_node_id);
 }
 
 void GVLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) {
-  if (node_match_.find(parent.GetNum()) == node_match_.end()) {
-    LogElem(parent);
-  }
-  if (node_match_.find(elem.GetNum()) == node_match_.end()) {
-    LogElem(elem);
-  }
-  size_t elem_node_num = node_match_[elem.GetNum()];
-  size_t parent_node_num = node_match_[parent.GetNum()];
-  size_t op_node_num = last_node_id_;
-  LogOptorNode(op);
+  size_t parent_node_id = LastElemId(parent);
+  size_t elem_node_id = NewOccurrence(elem);
+  LogElem(elem);
 
+  size_t optor_node_id = LogOptorNode(op);
+
+  LogNodesLink(parent_node_id, optor_node_id);
+  LogNodesLink(optor_node_id, elem_node_id);
 }
 
-void GVLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string&) {
-  fprintf(log_file_, "%zu [label = <<table border = \"1\" bgcolor = \"%s\">\n];", last_node_id_, GetElemColor(elem));
-  node_match_[elem.GetNum()] = last_node_id_;
-  fprintf(log_file_, "%zu -> %zu;\n", node_match_[parent1.GetNum()], last_node_id_);
-  fprintf(log_file_, "%zu -> %zu;\n", node_match_[parent2.GetNum()], last_node_id_);
-  ++last_node_id_;
-  fprintf(log_file_, ">]\n");
+void GVLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) {
+  size_t parent1_node_id = NewOccurrence(parent1);
+  size_t parent2_node_id = NewOccurrence(parent2);
+
+  size_t elem_node_id = NewOccurrence(elem);
+  LogElem(elem);
+
+  size_t optor_node_id = LogOptorNode(op);
+
+  LogNodesLink(parent1_node_id, optor_node_id);
+  LogNodesLink(parent2_node_id, optor_node_id);
+  LogNodesLink(optor_node_id, elem_node_id);
 }
 
-void GVLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string&) {
-  fprintf(log_file_, "%zu -> %zu;\n", node_match_[other.GetNum()], node_match_[elem.GetNum()]);
+void GVLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) {
+  size_t other_node_id = LastElemId(other);
+  size_t elem_node_id = NewOccurrence(elem);
+
+  size_t optor_node_id = LogOptorNode(op);
+
+  LogNodesLink(other_node_id, optor_node_id);
+  LogNodesLink(optor_node_id, elem_node_id);
 }
 
 void GVLogger::LogFuncEntry(const std::string&) {
@@ -82,28 +102,30 @@ void GVLogger::LogNodesLink(const size_t src_node, const size_t dst_node) {
   fprintf(log_file_, "%zu -> %zu\n", src_node, dst_node);
 }
 
-void GVLogger::LogCompOptor(const LogInt&, const LogInt&, const std::string&, bool) {}
-
 void GVLogger::LogShift() {}
 
 void GVLogger::LogElem(const LogInt& elem) {
-  size_t node_id = LogConnectPrevOccurrence(elem);
-  fprintf(log_file_, "%zu [lable = <<table border = \"1\" bgcolor = \"%s\">\n", node_id, GetElemColor(elem));
+  size_t node_id = LastElemId(elem);
+  if (logged_[node_id]) {
+    return;
+  }
+  logged_[node_id] = true;
+  fprintf(log_file_, "%zu [shape = \"none\" label = <<table border = \"1\" bgcolor = \"%s\">\n", node_id, GetElemColor(elem));
   LogElemName(elem);
   LogElemValue(elem);
   LogElemAddress(elem);
-  fprintf(log_file_, ">];\n");
+  fprintf(log_file_, "</table>>]\n");
 }
 
 size_t GVLogger::LogCtorNode(const std::string& name) {
   size_t ctor_node_id = FetchAddId();
-  fprintf(log_file_, "%zu [label = \"%s\" shape = \"diamond\"]", ctor_node_id, name.c_str());
+  fprintf(log_file_, "%zu [label = \"%s\" shape = \"diamond\"]\n", ctor_node_id, name.c_str());
   return ctor_node_id;
 }
 
 size_t GVLogger::LogOptorNode(const std::string& name) {
   size_t node_id = FetchAddId();
-  fprintf(log_file_, "%zu [label = \"%s\" shape = \"circle\"]", node_id, name.c_str());
+  fprintf(log_file_, "%zu [label = \"%s\" shape = \"circle\"]\n", node_id, name.c_str());
   return node_id;
 }
 
@@ -119,17 +141,22 @@ void GVLogger::LogElemAddress(const LogInt& elem) {
   fprintf(log_file_, "<tr><td>address</td><td>%p</td></tr>", static_cast<const void*>(&elem));
 }
 
-size_t GVLogger::LogConnectPrevOccurrence(const LogInt& elem) {
+size_t GVLogger::NewOccurrence(const LogInt& elem) {
   size_t last_id = 0;
   if (node_match_.find(elem.GetNum()) != node_match_.end()) {
     size_t prev_id = node_match_[elem.GetNum()];
     size_t curr_id = node_match_[elem.GetNum()] = FetchAddId();
     last_id = curr_id;
-    fprintf(log_file_, "%zu -> %zu [style = dotted];\n", prev_id, curr_id);
+    fprintf(log_file_, "%zu -> %zu [style = dotted]\n", prev_id, curr_id);
+    LogElem(elem);
   } else {
     last_id = node_match_[elem.GetNum()] = FetchAddId();
   }
   return last_id;
+}
+
+size_t GVLogger::LastElemId(const LogInt& elem) {
+  return node_match_[elem.GetNum()];
 }
 
 const char* GVLogger::GetElemColor(const LogInt& elem) {

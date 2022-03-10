@@ -15,12 +15,11 @@ class GVLogger: public ILogger {
   void LogValueCtor(const LogInt& elem) override;
   void LogCopyCtor(const LogInt& dst, const LogInt& src) override;
 
-  void LogAssOp(const LogInt& dst, const LogInt& src) override;
+  void LogAssOptor(const LogInt& dst, const LogInt& src) override;
 
   void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) override;
   void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) override;
   void LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) override;
-  void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) override;
 
   void LogFuncEntry(const std::string& func) override;
   void LogFuncEnd() override;
@@ -39,7 +38,8 @@ class GVLogger: public ILogger {
   void LogElemName(const LogInt& elem);
   void LogElemAddress(const LogInt& elem);
 
-  size_t LogConnectPrevOccurrence(const LogInt& elem);
+  size_t NewOccurrence(const LogInt& elem);
+  size_t LastElemId(const LogInt& elem);
 
   const char* GetElemColor(const LogInt& elem);
 
@@ -47,6 +47,7 @@ class GVLogger: public ILogger {
   size_t funcs_cnt_ = 0;
 
   std::map<size_t, size_t> node_match_;
+  std::map<size_t, bool> logged_;
   size_t last_node_id_ = 0;
 };
 

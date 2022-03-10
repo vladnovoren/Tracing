@@ -1,7 +1,6 @@
 #include "log_int.hpp"
 
-size_t LogInt::exp_num_ = 0;
-size_t LogInt::imp_num_ = 0;
+size_t LogInt::last_num_ = 0;
 
 LogInt::LogInt(const std::string& name) {
   FUNC_LOG;
@@ -36,7 +35,7 @@ const std::string& LogInt::GetHistory() const {
 }
 
 size_t LogInt::GetNum() const {
-  return is_imp_ ? imp_num_ : exp_num_;
+  return num_;
 }
 
 bool LogInt::IsImp() const {
@@ -51,7 +50,7 @@ LogInt& LogInt::operator=(const LogInt& other) {
   FUNC_LOG;
   value_ = other.value_;
   history_ = other.history_;
-  ILogger::curr_logger_->LogAssOp(*this, other);
+  ILogger::curr_logger_->LogAssOptor(*this, other);
   return *this;
 }
 
@@ -78,7 +77,6 @@ LogInt& LogInt::operator op(const LogInt& other) { \
 #define BINARY_COMP_OPTOR(op) \
 bool LogInt::operator op(const LogInt& other) const { \
   FUNC_LOG; \
-  ILogger::curr_logger_->LogCompOptor(*this, other, #op, value_ op other.value_); \
   return value_ op other.value_; \
 }
 
@@ -100,13 +98,12 @@ LogInt::LogInt(const LogInt& parent1, const LogInt& parent2, const int value, co
 }
 
 void LogInt::SetName(const std::string& name) {
+  num_ = last_num_++;
   if (name != "") {
-    ++exp_num_;
     is_imp_ = false;
-    name_ = name + "#" + std::to_string(exp_num_);
+    name_ = name + "#" + std::to_string(num_);
   } else {
-    ++imp_num_;
     is_imp_ = true;
-    name_ = "IMP#" + std::to_string(imp_num_);
+    name_ = "IMP#" + std::to_string(num_);
   }
 }

@@ -67,7 +67,7 @@ void HTMLLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   fprintf(log_file_, "\n");
 }
 
-void HTMLLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
+void HTMLLogger::LogAssOptor(const LogInt& dst, const LogInt& src) {
   LogShift();
   LogName(dst);
   fprintf(log_file_, " = ");
@@ -134,15 +134,6 @@ void HTMLLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, cons
   fprintf(log_file_, "{");
   LogElemValue(elem);
   fprintf(log_file_, "} ");
-  LogElem(other);
-  fprintf(log_file_, "\n");
-}
-
-void HTMLLogger::LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) {
-  LogShift();
-  fprintf(log_file_, "%s %s %s - %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str(), res ? "true" : "false");
-  LogElem(elem);
-  fprintf(log_file_, " ");
   LogElem(other);
   fprintf(log_file_, "\n");
 }

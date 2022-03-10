@@ -20,12 +20,11 @@ class HTMLLogger: public ITextLogger {
   void LogValueCtor(const LogInt& elem) override;
   void LogCopyCtor(const LogInt& dst, const LogInt& src) override;
 
-  void LogAssOp(const LogInt& dst, const LogInt& src) override;
+  void LogAssOptor(const LogInt& dst, const LogInt& src) override;
 
   void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) override;
   void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) override;
   void LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) override;
-  void LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) override;
 
   void LogFuncEntry(const std::string& func) override;
   void LogFuncEnd() override;

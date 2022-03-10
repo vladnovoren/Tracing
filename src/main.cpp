@@ -22,11 +22,10 @@ int main() {
 
   FUNC_LOG;
 
-  LOG_INT_INIT_BY_COPY(res, Fib(5));
+  LOG_INT_INIT_BY_VALUE(a, 5);
+  LOG_INT_DECL(b);
 
-  LogInt a(5), b(5), c(5);
-  a = a + b;
-
+  a = Fib(3);
 
   return 0;
 }

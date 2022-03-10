@@ -50,7 +50,7 @@ void ConLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   printf("\n");
 }
 
-void ConLogger::LogAssOp(const LogInt& dst, const LogInt& src) {
+void ConLogger::LogAssOptor(const LogInt& dst, const LogInt& src) {
   LogShift();
   printf("%s = %s ", dst.GetName().c_str(), src.GetName().c_str());
   printf("{");
@@ -106,15 +106,6 @@ void ConLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const
   printf("{");
   LogElemValue(elem);
   printf("} ");
-  LogElem(other);
-  printf("\n");
-}
-
-void ConLogger::LogCompOptor(const LogInt& elem, const LogInt& other, const std::string& op, bool res) {
-  LogShift();
-  printf("%s %s %s - %s ", elem.GetName().c_str(), op.c_str(), other.GetName().c_str(), res ? "true" : "false");
-  LogElem(elem);
-  printf(" ");
   LogElem(other);
   printf("\n");
 }

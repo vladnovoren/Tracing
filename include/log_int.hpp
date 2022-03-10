@@ -56,10 +56,10 @@ class LogInt {
   std::string name_ = "";
   std::string history_ = "";
 
-  static size_t exp_num_;
-  static size_t imp_num_;
+  static size_t last_num_;
+  size_t num_ = 0;
 
-  bool is_imp_ = true;
+  bool is_imp_ = false;
 };
 
 #define LOG_INT_DECL(var) LogInt var(#var)
