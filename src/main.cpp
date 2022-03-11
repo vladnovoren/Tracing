@@ -3,6 +3,7 @@
 #include "log_int.hpp"
 #include "log_initer.hpp"
 #include "html_logger.hpp"
+#include "move_semantics.hpp"
 
 void Func(const int*, size_t) {
   FUNC_LOG;
@@ -17,15 +18,32 @@ LogInt Fib(const size_t n) {
   }
 }
 
+template<typename T>
+void MovingSetter(T&& obj) {
+  FUNC_LOG;
+  volatile typename std::remove_reference<T>::type dst = my_move(obj);
+}
+
+template<typename T>
+void ForwardingSetter(T&& obj) {
+  FUNC_LOG;
+  volatile typename std::remove_reference<T>::type dst = my_forward<T>(obj);
+}
+
+template<typename T>
+void Wrapper(T&& obj) {
+  FUNC_LOG;
+  ForwardingSetter(my_forward<T>(obj));
+}
+
 int main() {
   LogIniter::GetInstance(LogType::GV);
-
   FUNC_LOG;
 
-  LOG_INT_INIT_BY_VALUE(a, 5);
-  LOG_INT_DECL(b);
+  LOG_INT_INIT_BY_VALUE(a, 42);
 
-  a = Fib(3);
+  // Wrapper(a);
+  Wrapper(my_move(a));
 
   return 0;
 }

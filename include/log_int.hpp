@@ -13,6 +13,7 @@ class LogInt {
   LogInt(const std::string& name = "");
   LogInt(const int value, const std::string& name = "");
   LogInt(const LogInt& other, const std::string& name = "");
+  LogInt(LogInt&& other, const std::string& name = "");
   ~LogInt();
 
   const std::string& GetName() const;
@@ -22,6 +23,7 @@ class LogInt {
   const char* GetTypeStr() const;
 
   LogInt& operator=(const LogInt& other);
+  LogInt& operator=(LogInt&& other);
 
   int value_ = 0;
 

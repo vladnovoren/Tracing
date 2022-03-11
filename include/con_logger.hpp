@@ -16,8 +16,11 @@ class ConLogger: public ITextLogger {
   void LogDefaultCtor(const LogInt& elem) override;
   void LogValueCtor(const LogInt& elem) override;
   void LogCopyCtor(const LogInt& dst, const LogInt& src) override;
+  void LogMoveCtor(const LogInt& dst, const LogInt& src) override;
+  void LogDtor(const LogInt& elem) override;
 
   void LogAssOptor(const LogInt& dst, const LogInt& src) override;
+  void LogMoveAssOptor(const LogInt& dst, const LogInt& src) override;
 
   void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) override;
   void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) override;

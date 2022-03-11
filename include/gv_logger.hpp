@@ -5,6 +5,16 @@
 #include <map>
 #include "ilogger.hpp"
 #include "log_int.hpp"
+#include <vector>
+
+
+struct Edge {
+  size_t src_ = 0;
+  size_t dst_ = 0;
+
+  bool dotted_ = false;
+};
+
 
 class GVLogger: public ILogger {
  public:
@@ -14,8 +24,11 @@ class GVLogger: public ILogger {
   void LogDefaultCtor(const LogInt& elem) override;
   void LogValueCtor(const LogInt& elem) override;
   void LogCopyCtor(const LogInt& dst, const LogInt& src) override;
+  void LogMoveCtor(const LogInt& dst, const LogInt& src) override;
+  void LogDtor(const LogInt& elem) override;
 
   void LogAssOptor(const LogInt& dst, const LogInt& src) override;
+  void LogMoveAssOptor(const LogInt& dst, const LogInt& src) override;
 
   void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) override;
   void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) override;
@@ -27,7 +40,7 @@ class GVLogger: public ILogger {
  protected:
   size_t FetchAddId();
 
-  void LogNodesLink(const size_t src_node, const size_t dst_node);
+  void LogNodesLink(const Edge& edge);
 
   size_t LogOptorNode(const std::string& name);
   size_t LogCtorNode(const std::string& name);
@@ -37,6 +50,8 @@ class GVLogger: public ILogger {
   void LogElemValue(const LogInt& elem) override;
   void LogElemName(const LogInt& elem);
   void LogElemAddress(const LogInt& elem);
+
+  void LogEdges();
 
   size_t NewOccurrence(const LogInt& elem);
   size_t LastElemId(const LogInt& elem);
@@ -49,6 +64,8 @@ class GVLogger: public ILogger {
   std::map<size_t, size_t> node_match_;
   std::map<size_t, bool> logged_;
   size_t last_node_id_ = 0;
+
+  std::vector<Edge> edges_;
 };
 
 #endif /* gv_logger.hpp */

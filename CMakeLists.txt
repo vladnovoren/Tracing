@@ -28,7 +28,8 @@ set(TRACING_SOURCE src/con_logger.cpp
                    src/log_int.cpp
                    src/log_initer.cpp
                    src/html_logger.cpp
-                   src/gv_logger.cpp)
+                   src/gv_logger.cpp
+                   src/move_semantics.cpp)
 
 add_executable(Tracing ${TRACING_SOURCE} src/main.cpp)
 target_include_directories(Tracing PUBLIC include/)

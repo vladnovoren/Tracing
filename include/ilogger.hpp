@@ -19,8 +19,11 @@ class ILogger {
   virtual void LogDefaultCtor(const LogInt& elem) = 0;
   virtual void LogValueCtor(const LogInt& elem) = 0;
   virtual void LogCopyCtor(const LogInt& dst, const LogInt& src) = 0;
+  virtual void LogMoveCtor(const LogInt& dst, const LogInt& src) = 0;
+  virtual void LogDtor(const LogInt& elem) = 0;
 
   virtual void LogAssOptor(const LogInt& dst, const LogInt& src) = 0;
+  virtual void LogMoveAssOptor(const LogInt& dst, const LogInt& src) = 0;
 
   virtual void LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) = 0;
   virtual void LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) = 0;

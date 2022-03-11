@@ -67,6 +67,10 @@ void HTMLLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   fprintf(log_file_, "\n");
 }
 
+void HTMLLogger::LogMoveCtor(const LogInt&, const LogInt&) {}
+
+void HTMLLogger::LogDtor(const LogInt&) {}
+
 void HTMLLogger::LogAssOptor(const LogInt& dst, const LogInt& src) {
   LogShift();
   LogName(dst);
@@ -80,6 +84,9 @@ void HTMLLogger::LogAssOptor(const LogInt& dst, const LogInt& src) {
   LogElem(src);
   fprintf(log_file_, "\n");
 }
+
+void HTMLLogger::LogMoveAssOptor(const LogInt&, const LogInt&) {}
+
 
 void HTMLLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) {
   LogShift();

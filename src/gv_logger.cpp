@@ -6,6 +6,7 @@ GVLogger::GVLogger() {
 }
 
 GVLogger::~GVLogger() {
+  LogEdges();
   fprintf(log_file_, "}\n");
   fclose(log_file_);
 }
@@ -15,7 +16,7 @@ void GVLogger::LogDefaultCtor(const LogInt& elem) {
   LogElem(elem);
 
   size_t ctor_node_id = LogCtorNode("DefaultCtor");
-  LogNodesLink(ctor_node_id, elem_node_id);
+  LogNodesLink({ctor_node_id, elem_node_id});
 }
 
 void GVLogger::LogValueCtor(const LogInt& elem) {
@@ -23,18 +24,33 @@ void GVLogger::LogValueCtor(const LogInt& elem) {
   LogElem(elem);
 
   size_t ctor_node_id = LogCtorNode("ValueCtor");
-  LogNodesLink(ctor_node_id, elem_node_id);
+  LogNodesLink({ctor_node_id, elem_node_id});
 }
 
 void GVLogger::LogCopyCtor(const LogInt& dst, const LogInt& src) {
   size_t dst_node_id = NewOccurrence(dst);
   LogElem(dst);
 
-  size_t src_node_id = LastElemId(src);
+  size_t src_node_id = NewOccurrence(src);
   size_t ctor_node_id = LogCtorNode("CopyCtor");
 
-  LogNodesLink(src_node_id, ctor_node_id);
-  LogNodesLink(ctor_node_id, dst_node_id);
+  LogNodesLink({src_node_id, ctor_node_id});
+  LogNodesLink({ctor_node_id, dst_node_id});
+}
+
+void GVLogger::LogMoveCtor(const LogInt& dst, const LogInt& src) {
+  size_t dst_node_id = NewOccurrence(dst);
+  LogElem(dst);
+
+  size_t src_node_id = NewOccurrence(src);
+  size_t ctor_node_id = LogCtorNode("MoveCtor");
+
+  LogNodesLink({src_node_id, ctor_node_id});
+  LogNodesLink({ctor_node_id, dst_node_id});
+}
+
+void GVLogger::LogDtor(const LogInt& elem) {
+  NewOccurrence(elem);
 }
 
 void GVLogger::LogAssOptor(const LogInt& dst, const LogInt& src) {
@@ -44,19 +60,30 @@ void GVLogger::LogAssOptor(const LogInt& dst, const LogInt& src) {
 
   size_t optor_node_id = LogOptorNode("CopyAssOptor");
 
-  LogNodesLink(src_node_id, optor_node_id);
-  LogNodesLink(optor_node_id, dst_node_id);
+  LogNodesLink({src_node_id, optor_node_id});
+  LogNodesLink({optor_node_id, dst_node_id});
+}
+
+void GVLogger::LogMoveAssOptor(const LogInt& dst, const LogInt& src) {
+  size_t src_node_id = NewOccurrence(src);
+  size_t dst_node_id = NewOccurrence(dst);
+  LogElem(dst);
+
+  size_t optor_node_id = LogOptorNode("MoveAssOptor");
+
+  LogNodesLink({src_node_id, optor_node_id});
+  LogNodesLink({optor_node_id, dst_node_id});
 }
 
 void GVLogger::LogUnaryOptor(const LogInt& elem, const LogInt& parent, const std::string& op) {
-  size_t parent_node_id = LastElemId(parent);
+  size_t parent_node_id = NewOccurrence(parent);
   size_t elem_node_id = NewOccurrence(elem);
   LogElem(elem);
 
   size_t optor_node_id = LogOptorNode(op);
 
-  LogNodesLink(parent_node_id, optor_node_id);
-  LogNodesLink(optor_node_id, elem_node_id);
+  LogNodesLink({parent_node_id, optor_node_id});
+  LogNodesLink({optor_node_id, elem_node_id});
 }
 
 void GVLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const LogInt& parent2, const std::string& op) {
@@ -68,28 +95,35 @@ void GVLogger::LogBinaryOptor(const LogInt& elem, const LogInt& parent1, const L
 
   size_t optor_node_id = LogOptorNode(op);
 
-  LogNodesLink(parent1_node_id, optor_node_id);
-  LogNodesLink(parent2_node_id, optor_node_id);
-  LogNodesLink(optor_node_id, elem_node_id);
+  LogNodesLink({parent1_node_id, optor_node_id});
+  LogNodesLink({parent2_node_id, optor_node_id});
+  LogNodesLink({optor_node_id, elem_node_id});
 }
 
 void GVLogger::LogBinaryAssOptor(const LogInt& elem, const LogInt& other, const std::string& op) {
-  size_t other_node_id = LastElemId(other);
+  size_t other_node_id = NewOccurrence(other);
   size_t elem_node_id = NewOccurrence(elem);
 
   size_t optor_node_id = LogOptorNode(op);
 
-  LogNodesLink(other_node_id, optor_node_id);
-  LogNodesLink(optor_node_id, elem_node_id);
+  LogNodesLink({other_node_id, optor_node_id});
+  LogNodesLink({optor_node_id, elem_node_id});
 }
 
-void GVLogger::LogFuncEntry(const std::string&) {
+void GVLogger::LogFuncEntry(const std::string& name) {
   fprintf(log_file_, "subgraph cluster_%zu {\n", funcs_cnt_);
+  fprintf(log_file_, "label = \"%s\"\n", name.c_str());
   ++funcs_cnt_;
 }
 
 void GVLogger::LogFuncEnd() {
   fprintf(log_file_, "}\n");
+}
+
+void GVLogger::LogEdges() {
+  for (auto& edge: edges_) {
+    fprintf(log_file_, "%zu -> %zu%s\n", edge.src_, edge.dst_, edge.dotted_ ? " [style=\"dotted\"]" : "");
+  }
 }
 
 size_t GVLogger::FetchAddId() {
@@ -98,8 +132,8 @@ size_t GVLogger::FetchAddId() {
   return prev;
 }
 
-void GVLogger::LogNodesLink(const size_t src_node, const size_t dst_node) {
-  fprintf(log_file_, "%zu -> %zu\n", src_node, dst_node);
+void GVLogger::LogNodesLink(const Edge& edge) {
+  edges_.push_back(edge);
 }
 
 void GVLogger::LogShift() {}
@@ -147,7 +181,7 @@ size_t GVLogger::NewOccurrence(const LogInt& elem) {
     size_t prev_id = node_match_[elem.GetNum()];
     size_t curr_id = node_match_[elem.GetNum()] = FetchAddId();
     last_id = curr_id;
-    fprintf(log_file_, "%zu -> %zu [style = dotted]\n", prev_id, curr_id);
+    LogNodesLink({prev_id, curr_id, true});
     LogElem(elem);
   } else {
     last_id = node_match_[elem.GetNum()] = FetchAddId();
