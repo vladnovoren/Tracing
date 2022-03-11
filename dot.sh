@@ -1,2 +1,2 @@
-dot -Tpdf log.dot -olog.pdf
+dot -Tpng log.dot -olog.png
 

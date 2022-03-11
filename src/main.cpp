@@ -18,32 +18,27 @@ LogInt Fib(const size_t n) {
   }
 }
 
-// template<typename T>
-// void MovingSetter(T&& obj) {
-//   FUNC_LOG;
-//   volatile typename my_remove_reference<T>::type dst = my_move(obj);
-// }
+template<typename T>
+void Imitator(const T& obj) {
+  FUNC_LOG;
+  volatile T copy = obj; // imitates of passing obj to some container
+}
 
-// template<typename T>
-// void ForwardingSetter(T&& obj) {
-//   FUNC_LOG;
-//   volatile typename my_remove_reference<T>::type dst = my_forward<T>(obj);
-// }
-
-// template<typename T>
-// void Wrapper(T&& obj) {
-//   FUNC_LOG;
-//   MovingSetter(my_forward<T>(obj));
-// }
-
+template<typename T>
+void Wrapper(const T& obj) {
+  FUNC_LOG;
+  Imitator(obj);
+}
 
 template<typename T>
 void Imitator(T&& obj) {
-  volatile typename my_remove_reference<T>::type copy = obj; // imitates of passing obj to some container
+  FUNC_LOG;
+  volatile typename my_remove_reference<T>::type copy = my_move(obj);
 }
 
 template<typename T>
 void Wrapper(T&& obj) {
+  FUNC_LOG;
   Imitator(obj);
 }
 
@@ -52,10 +47,7 @@ int main() {
   FUNC_LOG;
 
   LOG_INT_INIT_BY_VALUE(a, 42);
-
-  // Wrapper(a);
-  // Wrapper(1);
-  // Wrapper(my_move(a));
+  Wrapper(my_move(a));
 
   return 0;
 }
